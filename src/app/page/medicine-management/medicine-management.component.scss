@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+
+    input {
+        margin-bottom: 0px !important;
+        margin-right: 1rem;
+    }
+}
+
+.table {
+    --pico-form-element-spacing-horizontal: 0.5rem;
+    --pico-form-element-spacing-vertical: 0.5rem;
+    font-size: 0.8rem !important;
+    padding-top: 2.5rem;
+
+    .actionCol {
+        text-align: right;
+    }
+
+    button {
+        font-size: 12pt !important;
+    }
+}

@@ -5,7 +5,7 @@ import { Medicine } from '../utils/model/medicine';
 import { patchState, signalState } from '@ngrx/signals';
 
 interface State {
-  medicines: string[];
+  medicines: Medicine[];
 }
 
 @Injectable({
@@ -29,10 +29,18 @@ export class MedicineService {
       .subscribe(medicines => {
         patchState(this.state, (prev) => ({
           ...prev,
-          medicines: medicines.map(medicine => medicine.name),
+          medicines: medicines,
         })
         );
       });
+  }
+
+  addMedicine(medicine: Medicine) {
+    return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
+  }
+
+  deleteMedicine(id: number) {
+    return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
   }
 
 }

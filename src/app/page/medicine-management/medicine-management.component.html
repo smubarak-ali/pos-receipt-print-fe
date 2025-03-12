@@ -1,0 +1,28 @@
+<div class="header">
+    <input type="text" name="medicineName" placeholder="Medicine Name..." [(ngModel)]="medicineName" />
+    <button class="outline" (click)="addMedicine($event)">Add</button>
+</div>
+
+<div class="table">
+    <table>
+        <thead>
+            <tr>
+                <th scope="col" style="width: 70%;"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (medicine of medicines(); track medicine.id;) {
+            <tr scope="row">
+                <td>
+                    <label>{{ medicine.name }}</label>
+                </td>
+                <td class="actionCol">
+                    <button class="outline" (click)="deleteMedicine(medicine.id)">Delete</button>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+</div>

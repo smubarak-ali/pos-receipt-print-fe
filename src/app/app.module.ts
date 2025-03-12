@@ -3,16 +3,21 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
+import { MedicineManagementComponent } from './page/medicine-management/medicine-management.component';
+import { ReceiptFormComponent } from './page/receipt-form/receipt-form.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MedicineManagementComponent,
+    ReceiptFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
   ],
   providers: [
