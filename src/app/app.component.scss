@@ -1,0 +1,24 @@
+table {
+
+    --pico-form-element-spacing-horizontal: 0.3rem;
+    --pico-form-element-spacing-vertical: 0.3rem;
+    --pico-spacing: 0.6rem;
+ 
+    select {
+        font-size: 0.8rem !important;
+    }
+
+    input {    
+        font-size: 0.8rem !important;
+    }
+
+    .w-40 {
+        width: 40%;
+    }
+}
+
+button {
+    --pico-form-element-spacing-horizontal: 0.5rem;
+    --pico-form-element-spacing-vertical: 0.5rem;
+   font-size: 0.8rem !important;
+}
