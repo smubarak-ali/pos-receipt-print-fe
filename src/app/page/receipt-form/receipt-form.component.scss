@@ -3,13 +3,13 @@ table {
     --pico-form-element-spacing-horizontal: 0.3rem;
     --pico-form-element-spacing-vertical: 0.3rem;
     --pico-spacing: 0.7rem;
- 
+
     select {
         font-size: 0.8rem !important;
         margin-bottom: 0px !important;
     }
 
-    input {    
+    input {
         font-size: 0.8rem !important;
         margin-bottom: 0px !important;
     }
@@ -22,15 +22,29 @@ table {
 button {
     --pico-form-element-spacing-horizontal: 0.5rem;
     --pico-form-element-spacing-vertical: 0.5rem;
-   font-size: 0.8rem !important;
+    font-size: 0.8rem !important;
+}
+
+.form-buttons {
+    button {
+        &.outline {
+            width: 50px; 
+            font-size: 1.1rem !important;
+        }
+    }
 }
 
 .route-link {
     display: flex;
     justify-content: center;
     padding-bottom: 1rem;
-    
+
     a {
         font-size: 12pt !important;
     }
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
 }

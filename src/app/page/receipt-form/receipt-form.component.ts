@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
 import { MedicineService } from '../../service/medicine.service';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -38,11 +38,11 @@ export class ReceiptFormComponent implements OnInit {
 
   addRow() {
     const row = this.fb.group({
-      medicine: [''],
-      quantity: [''],
-      price: [''],
-      gstRate: [''],
-      gst: [''],
+      medicine: ['', [Validators.required]],
+      quantity: ['', [Validators.required]],
+      price: ['', [Validators.required]],
+      gstRate: ['0'],
+      gst: ['0'],
       total: ['']
     });
     this.rows.push(row);
@@ -58,3 +58,4 @@ export class ReceiptFormComponent implements OnInit {
     console.log(this.form.value);
   }
 }
+

@@ -4,7 +4,7 @@
   <a routerLink="/medicine">View medicine</a>
 </div>
 
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <table class="striped">
     <thead>
       <tr>
@@ -38,13 +38,12 @@
   </table>
 
   <div class="form-buttons">
-    <button type="button" class="outline" style="margin-right: 10px;" (click)="addRow()">Add Row</button>
-    <button type="button" class="outline" (click)="removeLastRow()" [disabled]="rows.length <= 1">Remove Last
-      Row</button>
+    <button type="button" class="outline" style="margin-right: 10px;" (click)="addRow()"> + </button>
+    <button type="button" class="outline" (click)="removeLastRow()" [disabled]="rows.length <= 1"> - </button>
   </div>
 
-  <!-- <div>
-    <button type="submit" class="secondary">Submit</button>
-  </div> -->
+  <div class="form-footer">
+    <button type="submit" style="width: 170px;">Print Devago</button>
+  </div>
 
 </form>

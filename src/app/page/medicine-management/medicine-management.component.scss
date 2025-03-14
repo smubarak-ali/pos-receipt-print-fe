@@ -1,6 +1,32 @@
+a {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    label {
+        margin-bottom: 0px !important;
+    }
+
+    .chevron {
+        display: block;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-inline-start: calc(var(--pico-spacing, 1rem) * .5);
+        float: right;
+        transform: rotate(90deg);
+        background-image: var(--pico-icon-chevron);
+        background-position: right center;
+        background-size: 1.5rem auto;
+        background-repeat: no-repeat;
+        content: "";
+        transition: transform var(--pico-transition);
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;
+    padding-top: 1rem;
 
     input {
         margin-bottom: 0px !important;
