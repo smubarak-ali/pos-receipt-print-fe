@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, of, take } from 'rxjs';
 import { Medicine } from '../utils/model/medicine';
 import { patchState, signalState } from '@ngrx/signals';
+import { environment } from '../../environments/environment';
 
 interface State {
   medicines: Medicine[];
@@ -16,7 +17,7 @@ export class MedicineService {
   private readonly state = signalState<State>({
     medicines: [],
   });
-  private readonly BASE_URL = "http://localhost:8000/api";
+  private readonly BASE_URL = environment.baseUrl;
   private readonly http = inject(HttpClient);
 
   get medicines() {

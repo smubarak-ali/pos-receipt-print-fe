@@ -37,13 +37,34 @@
     </tbody>
   </table>
 
+  <swal
+    #confirmModal
+    title="Print Receipt"
+    text="Are you sure you want to print this receipt? Please check the total and discount."
+    [showCancelButton]="true"
+    [focusCancel]="true"
+    (confirm)="printReceipt()"
+    width="550"
+    >
+  </swal>
+
+
+  @if (total() || discount()) {
+    <article class="pb-3 pt-5">
+      <label>Gross Total: {{ total().toFixed(2) }}</label>
+      <label>Discount: {{ discount().toFixed(2) }}</label>
+      <label>Net Total: {{ (total() - discount()).toFixed(2) }}</label>
+    </article>
+  }
+
+
   <div class="form-buttons">
     <button type="button" class="outline" style="margin-right: 10px;" (click)="addRow()"> + </button>
     <button type="button" class="outline" (click)="removeLastRow()" [disabled]="rows.length <= 1"> - </button>
   </div>
 
   <div class="form-footer">
-    <button type="submit" style="width: 170px;">Print Devago</button>
+    <button type="submit" style="width: 170px;" [disabled]="form.invalid">Print Devago</button>
   </div>
 
 </form>

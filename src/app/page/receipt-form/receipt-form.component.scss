@@ -48,3 +48,10 @@ button {
     display: flex;
     justify-content: flex-end;
 }
+
+article {
+    label {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+}
