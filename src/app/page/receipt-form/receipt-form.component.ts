@@ -128,42 +128,44 @@ export class ReceiptFormComponent implements OnInit {
   }
 
   printReceipt() {
-    const element = document.getElementById("dataTable");
+    this.printService.printDevagoReceipt(this.printRequest())
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.form = this.fb.group({
+            rows: this.fb.array([])
+          });
+          this.addRow();
+        },
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          this.total.set(0);
+          this.discount.set(0);
+          this.confirmModal()?.close();
+          this.printRequest.set({} as PrintRequest);
+        }
+      });
 
-    if (element != null) {
-      htmlToImage
-        .toPng(element)
-        .then((dataUrl) => {
-          console.log(dataUrl);
-          this.printRequest.update(value => ({
-            ...value,
-            imgBase64: dataUrl
-          }));
+    // const element = document.getElementById("dataTable");
 
-          this.printService.printDevagoReceipt(this.printRequest())
-            .pipe(take(1))
-            .subscribe({
-              next: () => {
-                this.form = this.fb.group({
-                  rows: this.fb.array([])
-                });
-                this.addRow();
-              },
-              error: (err) => {
-                console.error(err);
-              },
-              complete: () => {
-                this.total.set(0);
-                this.discount.set(0);
-                this.confirmModal()?.close();
-                this.printRequest.set({} as PrintRequest);
-              }
-            });
-        })
-        .catch((err) => {
-          console.error('oops, something went wrong!', err);
-        });
-    }
+    // if (element != null) {
+    //   htmlToImage
+    //     .toPng(element)
+    //     .then((dataUrl) => {
+    //       console.log(dataUrl);
+    //       this.printRequest.update(value => ({
+    //         ...value,
+    //         imgBase64: dataUrl
+    //       }));
+
+
+    //     })
+    //     .catch((err) => {
+    //       console.error('oops, something went wrong!', err);
+    //     });
+    // }
   }
 
   formatNumber(val: number) {
