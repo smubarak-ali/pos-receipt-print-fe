@@ -8,12 +8,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
 import { MedicineManagementComponent } from './page/medicine-management/medicine-management.component';
 import { ReceiptFormComponent } from './page/receipt-form/receipt-form.component';
+import { HtmlImageComponent } from './components/html-image/html-image.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MedicineManagementComponent,
-    ReceiptFormComponent
+    ReceiptFormComponent,
+    HtmlImageComponent
   ],
   imports: [
     BrowserModule,

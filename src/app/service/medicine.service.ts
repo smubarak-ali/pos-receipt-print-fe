@@ -31,8 +31,7 @@ export class MedicineService {
         patchState(this.state, (prev) => ({
           ...prev,
           medicines: medicines,
-        })
-        );
+        }));
       });
   }
 

@@ -1,14 +1,18 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
+import numbro from "numbro";
 import { MedicineService } from '../../service/medicine.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+
 import { distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
 import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
+import { deepQuerySelectorAll } from '../../utils/helper/query-selector';
 
 @Component({
   selector: 'app-receipt-form',
@@ -21,7 +25,7 @@ export class ReceiptFormComponent implements OnInit {
   private readonly medicineService = inject(MedicineService);
   private readonly printService = inject(PrintServiceService);
 
-  protected readonly confirmModal = viewChild<SwalComponent>('confirmModal');
+  readonly confirmModal = viewChild<SwalComponent>('confirmModal');
   form!: FormGroup;
   total = signal(0);
   discount = signal(0);
@@ -93,7 +97,6 @@ export class ReceiptFormComponent implements OnInit {
     const printItems = new Array<PrintItems>();
     let total = 0;
     this.form.value.rows.forEach((row: any) => {
-      // console.log("row: ", row);
       const printItem: PrintItems = {
         productName: row.medicine,
         gstAmount: row.gst,
@@ -125,26 +128,46 @@ export class ReceiptFormComponent implements OnInit {
   }
 
   printReceipt() {
-    this.printService.printDevagoReceipt(this.printRequest())
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          // location.reload();
-          this.form = this.fb.group({
-            rows: this.fb.array([])
-          });
-          this.addRow();
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          this.total.set(0);
-          this.discount.set(0);
-          this.confirmModal()?.close();
-          this.printRequest.set({} as PrintRequest);
-        }
-      });
+    const element = document.getElementById("dataTable");
+
+    if (element != null) {
+      htmlToImage
+        .toPng(element)
+        .then((dataUrl) => {
+          console.log(dataUrl);
+          this.printRequest.update(value => ({
+            ...value,
+            imgBase64: dataUrl
+          }));
+
+          this.printService.printDevagoReceipt(this.printRequest())
+            .pipe(take(1))
+            .subscribe({
+              next: () => {
+                this.form = this.fb.group({
+                  rows: this.fb.array([])
+                });
+                this.addRow();
+              },
+              error: (err) => {
+                console.error(err);
+              },
+              complete: () => {
+                this.total.set(0);
+                this.discount.set(0);
+                this.confirmModal()?.close();
+                this.printRequest.set({} as PrintRequest);
+              }
+            });
+        })
+        .catch((err) => {
+          console.error('oops, something went wrong!', err);
+        });
+    }
+  }
+
+  formatNumber(val: number) {
+    return numbro(val).format({ mantissa: 2 });
   }
 
 }
