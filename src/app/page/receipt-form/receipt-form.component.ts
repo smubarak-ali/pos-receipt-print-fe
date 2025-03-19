@@ -51,7 +51,7 @@ export class ReceiptFormComponent implements OnInit {
 
   addRow() {
     const row = this.fb.group({
-      medicine: ['', [Validators.required]],
+      medicine: ['', [Validators.required], { focus: true }],
       quantity: ['1', [Validators.required, greaterThan(0)]],
       price: ['0', [Validators.required, greaterThan(0)]],
       gstRate: ['0'],
@@ -89,6 +89,11 @@ export class ReceiptFormComponent implements OnInit {
     if (this.rows.length > 1) {
       this.rows.removeAt(this.rows.length - 1);
     }
+  }
+
+  onTabPress(event: Event) {
+    event.preventDefault();
+    this.addRow();
   }
 
   async onSubmit() {

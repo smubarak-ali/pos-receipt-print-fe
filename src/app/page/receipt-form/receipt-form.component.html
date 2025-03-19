@@ -31,7 +31,7 @@
           </select>
         </td>
         <td><input type="number" formControlName="quantity" /></td>
-        <td><input type="number" formControlName="price" /></td>
+        <td><input type="number" formControlName="price" (keydown.tab)="onTabPress($event)" /></td>
         <td><input type="number" formControlName="gstRate" /></td>
         <td><input type="number" formControlName="gst" /></td>
         <td><input type="number" formControlName="total" /></td>
