@@ -2,9 +2,7 @@ import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
 import numbro from "numbro";
 import { MedicineService } from '../../service/medicine.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
@@ -12,7 +10,6 @@ import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
-import { deepQuerySelectorAll } from '../../utils/helper/query-selector';
 
 @Component({
   selector: 'app-receipt-form',
@@ -33,6 +30,7 @@ export class ReceiptFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
+      date: new FormControl(new Date(), [Validators.required]),
       rows: this.fb.array([])
     });
 
@@ -58,7 +56,7 @@ export class ReceiptFormComponent implements OnInit {
       price: ['0', [Validators.required, greaterThan(0)]],
       gstRate: ['0'],
       gst: ['0'],
-      total: ['', [Validators.required, greaterThan(0)]]
+      total: ['0', [Validators.required, greaterThan(0)]]
     });
     this.rows.push(row);
 
@@ -114,12 +112,13 @@ export class ReceiptFormComponent implements OnInit {
     this.discount.set(totalDiscount);
 
     const printRequest: PrintRequest = {
+      date: this.form.controls['date']?.value,
       items: printItems,
-      totalAmount: this.total(),
-      totalDiscount: this.discount(),
-      posServiceFee: 0,
-      charge: 0,
-      netTotal: this.total() - this.discount(),
+      totalAmount: this.formatNumber(this.total()),
+      totalDiscount: this.formatNumber(this.discount()),
+      posServiceFee: "0",
+      charge: "0",
+      netTotal: this.formatNumber(this.total() - this.discount()),
     };
 
     this.printRequest.set(printRequest);
@@ -133,6 +132,7 @@ export class ReceiptFormComponent implements OnInit {
       .subscribe({
         next: () => {
           this.form = this.fb.group({
+            date: new FormControl(new Date(), [Validators.required]),
             rows: this.fb.array([])
           });
           this.addRow();
@@ -147,25 +147,6 @@ export class ReceiptFormComponent implements OnInit {
           this.printRequest.set({} as PrintRequest);
         }
       });
-
-    // const element = document.getElementById("dataTable");
-
-    // if (element != null) {
-    //   htmlToImage
-    //     .toPng(element)
-    //     .then((dataUrl) => {
-    //       console.log(dataUrl);
-    //       this.printRequest.update(value => ({
-    //         ...value,
-    //         imgBase64: dataUrl
-    //       }));
-
-
-    //     })
-    //     .catch((err) => {
-    //       console.error('oops, something went wrong!', err);
-    //     });
-    // }
   }
 
   formatNumber(val: number) {

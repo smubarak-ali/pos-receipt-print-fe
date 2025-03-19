@@ -1,20 +1,21 @@
 export interface PrintRequest {
+    date: Date;
     items: PrintItems[];
-    totalAmount: number;
-    totalDiscount: number;
-    posServiceFee: number;
-    charge: number;
-    netTotal: number;
+    totalAmount: string;
+    totalDiscount: string;
+    posServiceFee: string;
+    charge: string;
+    netTotal: string;
 }
 
 export interface PrintItems {
     productId?: number;
     productName: string;
-    quantity: number;
-    price: number;
-    gstRate: number;
-    gstAmount: number;
-    totalAmount: number;
+    quantity: string;
+    price: string;
+    gstRate: string;
+    gstAmount: string;
+    totalAmount: string;
 }
 
 

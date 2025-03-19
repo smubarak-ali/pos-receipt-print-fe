@@ -5,6 +5,10 @@
 </div>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div style="padding-top: 3px; padding-bottom: 5px; width: 50%;">
+    <input type="datetime-local" name="datetime-local" aria-label="Datetime local" formControlName="date" />
+  </div>
+
   <table class="striped">
     <thead>
       <tr>
@@ -37,24 +41,18 @@
     </tbody>
   </table>
 
-  <swal
-    #confirmModal
-    title="Print Receipt"
-    text="Are you sure you want to print this receipt? Please check the total and discount."
-    [showCancelButton]="true"
-    [focusCancel]="true"
-    (confirm)="printReceipt()"
-    width="550"
-    >
+  <swal #confirmModal title="Print Receipt"
+    text="Are you sure you want to print this receipt? Please check the total and discount." [showCancelButton]="true"
+    [focusCancel]="true" (confirm)="printReceipt()" width="550">
   </swal>
 
 
   @if (total() || discount()) {
-    <article class="pb-3 pt-5">
-      <label>Gross Total: {{ total().toFixed(2) }}</label>
-      <label>Discount: {{ discount().toFixed(2) }}</label>
-      <label>Net Total: {{ (total() - discount()).toFixed(2) }}</label>
-    </article>
+  <article class="pb-3 pt-5">
+    <label>Gross Total: {{ formatNumber(total()) }}</label>
+    <label>Discount: {{ formatNumber(discount()) }}</label>
+    <label>Net Total: {{ formatNumber(total() - discount()) }}</label>
+  </article>
   }
 
 
@@ -68,8 +66,3 @@
   </div>
 
 </form>
-
-
-<!-- @if(printRequest() && printRequest().totalAmount > 0) {
-  <app-html-image id="homeImg" [data]="printRequest()"></app-html-image>
-} -->
