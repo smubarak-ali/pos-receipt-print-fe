@@ -51,7 +51,7 @@ export class ReceiptFormComponent implements OnInit {
 
   addRow() {
     const row = this.fb.group({
-      medicine: ['', [Validators.required], { focus: true }],
+      medicine: ['', [Validators.required]],
       quantity: ['1', [Validators.required, greaterThan(0)]],
       price: ['0', [Validators.required, greaterThan(0)]],
       gstRate: ['0'],
@@ -59,6 +59,20 @@ export class ReceiptFormComponent implements OnInit {
       total: ['0', [Validators.required, greaterThan(0)]]
     });
     this.rows.push(row);
+
+    row.get('medicine')?.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(val => {
+        if (val) {
+          const selectedMedicine = this.medicines().find(x => x.name === val);
+          if (selectedMedicine) {
+            row.get('price')?.setValue(`${selectedMedicine.price}`);
+          }
+        }
+      });
 
     row.get('price')?.valueChanges
       .pipe(

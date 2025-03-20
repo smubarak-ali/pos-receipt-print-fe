@@ -1,9 +1,4 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { injectDestroy } from 'ngxtension/inject-destroy';
-import { MedicineService } from './service/medicine.service';
-
-
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

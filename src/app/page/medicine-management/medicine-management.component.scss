@@ -24,9 +24,7 @@ a {
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 1rem;
+    padding-top: 1.5rem;
 
     input {
         margin-bottom: 0px !important;
@@ -38,7 +36,7 @@ a {
     --pico-form-element-spacing-horizontal: 0.5rem;
     --pico-form-element-spacing-vertical: 0.5rem;
     font-size: 0.8rem !important;
-    padding-top: 2.5rem;
+    padding-top: 1.5rem;
 
     .actionCol {
         text-align: right;
