@@ -24,7 +24,7 @@ import { PrintOutComponent } from './page/print-out/print-out.component';
     FormsModule,
     ReactiveFormsModule,
     SweetAlert2Module.forRoot(),
-    NgxPrinterModule.forRoot({ printOpenWindow: true, printPreviewOnly: true })
+    NgxPrinterModule.forRoot({ printOpenWindow: false, printPreviewOnly: false })
   ],
   providers: [
     provideHttpClient(),

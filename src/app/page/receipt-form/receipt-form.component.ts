@@ -28,7 +28,7 @@ export class ReceiptFormComponent implements OnInit {
   // readonly confirmModal = viewChild<SwalComponent>('confirmModal');
   devagoRoute = AppRoutes.DEVAGO;
   pakMedicalRoute = AppRoutes.PAK_MEDICAL;
-  
+
   form!: FormGroup;
   total = signal(0);
   discount = signal(0);
@@ -89,7 +89,7 @@ export class ReceiptFormComponent implements OnInit {
       .subscribe(value => {
         const quantity = row.get('quantity')?.value
         if (!!quantity && !!value) {
-          row.get('total')?.setValue(`${+value * +quantity}`);
+          row.get('total')?.setValue(`${(+value * +quantity).toFixed(2)}`);
         }
       });
 
@@ -101,7 +101,7 @@ export class ReceiptFormComponent implements OnInit {
       .subscribe(value => {
         const price = row.get('price')?.value
         if (!!price && !!value) {
-          row.get('total')?.setValue(`${+value * +price}`);
+          row.get('total')?.setValue(`${(+value * +price).toFixed(2)}`);
         }
       });
   }

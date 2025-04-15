@@ -1,0 +1,73 @@
+.pak-medical {
+    font-family: monospace;
+    background: #fff;
+    padding: 6px;
+
+    h2 {
+        margin: 0;
+        font-size: 16pt;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    & .title {
+        font-size: 12pt;
+        font-weight: bold;
+        border-top: 2px solid #000;
+        border-bottom: 2px solid #000;
+        margin: 5px 0;
+        padding: 3px 0;
+        background-color: #000;
+        color: "white";
+        text-align: center;
+    }
+
+    & .details,
+    .summary {
+        text-align: left;
+        font-size: 10pt;
+    }
+
+    & .details td,
+    .summary td {
+        padding: 3px 0;
+    }
+
+    .items-table {
+        width: 100%;
+        font-size: 8.5pt;
+        border-collapse: collapse;
+        margin-top: 8px;
+    }
+
+    .items-table th,
+    .items-table td {
+        border-bottom: 1px dashed #000;
+        padding: 4px 2px;
+        text-align: center;
+    }
+
+    .items-table th {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .items-table td:last-child,
+    .items-table th:last-child {
+        text-align: right;
+    }
+
+    .total-line {
+        border-top: 1px solid #000;
+        margin-top: 8px;
+        padding-top: 8px;
+        font-weight: bold;
+    }
+
+    .amount-in-words {
+        margin-top: 8px;
+        font-size: 9pt;
+        font-style: italic;
+        text-align: left;
+    }
+}

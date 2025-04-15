@@ -1,1 +1,73 @@
-<p>print-out works!</p>
+@if(data && data.type === pakMedicalRoute) {
+<button class="button" type="button" (click)="printPakMedicalReceipt()">Print Pak-Medical</button>
+
+<div class="pak-medical" #pakPrintDiv>
+    <h2>PAK MEDICAL & GENERAL</h2>
+    <div class="title">Bill</div>
+
+    <div class="details">
+        <table>
+            <tr>
+                <td><strong>Customer Name:</strong></td>
+                <td>SYED YASIR</td>
+            </tr>
+            <tr>
+                <td><strong>Invoice No:</strong></td>
+                <td>{{getInvoiceNo}}</td>
+            </tr>
+            <tr>
+                <td><strong>Date/Time:</strong></td>
+                <td>{{ data.printObject.date | date: 'EEEE, MMMM d, y h:mm a' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th style="width: 10px;">Qty</th>
+                <th style="width: 50px;">Item(s)</th>
+                <th style="width: 15px;">Price</th>
+                <th style="width: 10px;">Disc</th>
+                <th style="width: 15px;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(item of data.printObject.items; track $index) {
+            <tr>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.productName }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ getDiscountedAmount(+item.totalAmount).toFixed(2) }}</td>
+                <td>{{ (+item.totalAmount - getDiscountedAmount(+item.totalAmount)).toFixed(2) }}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="summary">
+        <table>
+            <tr>
+                <td><strong>Total Items:</strong></td>
+                <td>{{ data.printObject.items.length }}</td>
+            </tr>
+            <tr>
+                <td><strong>Total:</strong></td>
+                <td>{{ data.printObject.totalAmount}}</td>
+            </tr>
+            <tr>
+                <td><strong>Discount:</strong></td>
+                <td>{{ data.printObject.totalDiscount }}</td>
+            </tr>
+            <tr class="total-line">
+                <td><strong>Net Amount:</strong></td>
+                <td><strong>{{ data.printObject.netTotal }}</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- <div class="amount-in-words">
+        One thousand Two Hundred Five Only
+    </div> -->
+</div>
+}
