@@ -10,6 +10,8 @@ import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
+import { Router } from '@angular/router';
+import { AppRoutes } from '../../utils/objects/route';
 
 @Component({
   selector: 'app-receipt-form',
@@ -19,10 +21,14 @@ import { greaterThan } from '../../utils/custom-validator/greaterThan';
 })
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
+  private readonly router = inject(Router);
   private readonly medicineService = inject(MedicineService);
   private readonly printService = inject(PrintServiceService);
 
-  readonly confirmModal = viewChild<SwalComponent>('confirmModal');
+  // readonly confirmModal = viewChild<SwalComponent>('confirmModal');
+  devagoRoute = AppRoutes.DEVAGO;
+  pakMedicalRoute = AppRoutes.PAK_MEDICAL;
+  
   form!: FormGroup;
   total = signal(0);
   discount = signal(0);
@@ -31,6 +37,7 @@ export class ReceiptFormComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       date: new FormControl(new Date(), [Validators.required]),
+      printType: ['', [Validators.required]],
       rows: this.fb.array([])
     });
 
@@ -142,7 +149,9 @@ export class ReceiptFormComponent implements OnInit {
 
     this.printRequest.set(printRequest);
 
-    await this.confirmModal()?.fire();
+    // await this.confirmModal()?.fire();
+
+    await this.router.navigate(["print"], { state: { type: this.form.controls['printType']?.value, printObject: this.printRequest() } });
   }
 
   printReceipt() {
@@ -152,6 +161,7 @@ export class ReceiptFormComponent implements OnInit {
         next: () => {
           this.form = this.fb.group({
             date: new FormControl(new Date(), [Validators.required]),
+            printType: ['', [Validators.required]],
             rows: this.fb.array([])
           });
           this.addRow();
@@ -162,7 +172,7 @@ export class ReceiptFormComponent implements OnInit {
         complete: () => {
           this.total.set(0);
           this.discount.set(0);
-          this.confirmModal()?.close();
+          // this.confirmModal()?.close();
           this.printRequest.set({} as PrintRequest);
         }
       });
