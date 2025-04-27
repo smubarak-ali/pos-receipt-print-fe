@@ -1,16 +1,15 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
 import numbro from "numbro";
-import { MedicineService } from '../../service/medicine.service';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { distinctUntilChanged, take, takeUntil } from 'rxjs';
+import { MedicineService } from '../../service/medicine.service';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
 import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
-import { Router } from '@angular/router';
-import { AppRoutes } from '../../utils/objects/route';
+import { PrintType } from '../../utils/objects/constants';
 import { getRandomNumber } from '../../utils/helper/number.helper';
 
 @Component({
@@ -21,13 +20,12 @@ import { getRandomNumber } from '../../utils/helper/number.helper';
 })
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
-  private readonly router = inject(Router);
   private readonly medicineService = inject(MedicineService);
   private readonly printService = inject(PrintServiceService);
 
-  // readonly confirmModal = viewChild<SwalComponent>('confirmModal');
-  abdulHadiRoute = AppRoutes.ABDUL_HADI;
-  pakMedicalRoute = AppRoutes.PAK_MEDICAL;
+  abdulHadiPrintType = PrintType.ABDUL_HADI;
+  pakMedicalPrintType = PrintType.PAK_MEDICAL;
+  mdmPrintType = PrintType.MDM;
 
   form!: FormGroup;
   total = signal(0);
@@ -42,6 +40,7 @@ export class ReceiptFormComponent implements OnInit {
     });
 
     this.addRow();
+    
   }
 
   ngOnInit() {
@@ -153,14 +152,11 @@ export class ReceiptFormComponent implements OnInit {
     localStorage.setItem("discount", `${environment.discount}`);
     localStorage.setItem("pak_medical_print", JSON.stringify(printRequest));
 
-    if (this.form.controls['printType']?.value === this.pakMedicalRoute) {
+    if (this.form.controls['printType']?.value === this.pakMedicalPrintType) {
       window.open(`${environment.webUrl}/pak-medical.html`, "_blank");
-    } else if (this.form.controls['printType']?.value === this.abdulHadiRoute) {
+    } else if (this.form.controls['printType']?.value === this.abdulHadiPrintType) {
       this.printReceipt();
     }
-    // await this.confirmModal()?.fire();
-
-    // await this.router.navigate(["print"], { state: { type: this.form.controls['printType']?.value, printObject: this.printRequest() } });
   }
 
   printReceipt() {

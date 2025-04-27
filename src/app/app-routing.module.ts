@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { MedicineManagementComponent } from './page/medicine-management/medicine-management.component';
 import { ReceiptFormComponent } from './page/receipt-form/receipt-form.component';
-import { PrintOutComponent } from './page/print-out/print-out.component';
 
 const routes: Routes = [
   {
@@ -13,10 +12,6 @@ const routes: Routes = [
   {
     path: "medicine",
     component: MedicineManagementComponent
-  },
-  {
-    path: "print",
-    component: PrintOutComponent
   },
   {
     path: "**",
