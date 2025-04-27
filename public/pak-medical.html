@@ -13,23 +13,32 @@
       body {
         font-family: monospace;
         background: #fff;
-        padding: 1px;
+        /* padding: 1px; */
       }
 
       h2 {
-        margin: 0;
-        font-size: 16pt;
-        font-weight: bold;
+        /* margin: 0; */
+        font-family: "Arial black";
+        font-size: 14px;
+        font-weight: bolder;
         text-align: center;
+        margin-block-end: 0.2em;
+      }
+
+      h4 {
+        text-align: center;
+        margin-block-start: 0em;
+        margin-block-end: 0em;
       }
 
       .title {
-        font-size: 12pt;
-        font-weight: bold;
+        font-size: 14pt;
         margin: 5px 0;
         padding: 3px 0;
-        background-color: #000;
         text-align: center;
+        color: #000; 
+        text-decoration: underline; 
+        font-weight: bolder;
       }
 
       .details,
@@ -88,59 +97,27 @@
       } */
 
     </style>
-    <script>
-      $(document).ready(function () {
-        const data = localStorage.getItem("pak_medical_print");
-        const discountStr = localStorage.getItem("discount");
-        if (data == null || discountStr == null) {
-          console.log(" no data found in local storage...");
-          alert("Please close this window and click on the print again!");
-          return;
-        }
-
-        let $table = $("#myTable");
-        const printObj = JSON.parse(data);
-        const discount = +discountStr;
-
-        for (const item of printObj.items) {
-          let row = "<tr>";
-          row += "<td>" + item.quantity + "</td>";
-          row += "<td>" + item.productName + "</td>";
-          row += "<td>" + item.price + "</td>";
-          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
-          row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
-          row += "</tr>";
-          $table.append(row);
-        }
-
-        let $invNo = $("#invNo");
-        $invNo.text(printObj.invoiceNumber);
-        $("#totalItem").text(printObj.items.length);
-        $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
-        $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
-        $("#netTotal").text((+printObj.netTotal).toFixed(2));
-        $("#invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
-
-      });
-    </script>
   </head>
   <body>
     <div class="pak-medical">
       <h2>PAK MEDICAL & GENERAL</h2>
-      <div style="color: #fff; text-decoration: underline;" class="title">Bill</div>
+      <h4>Address: Shop No. 1-2, Plot No. 563, Block 3, Hussainabad F.B.Area</h4>
+      <div class="title">BILL</div>
 
       <div class="details">
         <table style="width: 100%;">
           <tr>
             <td style="width: 50%;"><strong>Customer Name:</strong></td>
-            <td>SYED YASIR</td>
+            <td>YASIR</td>
           </tr>
           <tr>
             <td style="width: 50%; font-size: 15pt;"><strong>Invoice No:</strong></td>
             <td style="font-size: 15pt;" id="invNo"></td>
           </tr>
+        </table>
+        <table style="width: 100%;">
           <tr>
-            <td style="width: 50%;"><strong>Date/Time:</strong></td>
+            <td style="width: 30%;"><strong>Date/Time:</strong></td>
             <td id="invDate">
             </td>
           </tr>
@@ -187,5 +164,41 @@
             One thousand Two Hundred Five Only
         </div> -->
     </div>
+
+    <script>
+      $(document).ready(function () {
+        const data = localStorage.getItem("pak_medical_print");
+        const discountStr = localStorage.getItem("discount");
+        if (data == null || discountStr == null) {
+          console.log(" no data found in local storage...");
+          alert("Please close this window and click on the print again!");
+          return;
+        }
+
+        let $table = $("#myTable");
+        const printObj = JSON.parse(data);
+        const discount = +discountStr;
+
+        for (const item of printObj.items) {
+          let row = "<tr>";
+          row += "<td>" + item.quantity + "</td>";
+          row += "<td>" + item.productName + "</td>";
+          row += "<td>" + item.price + "</td>";
+          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "</tr>";
+          $table.append(row);
+        }
+
+        let $invNo = $("#invNo");
+        $invNo.text(printObj.invoiceNumber);
+        $("#totalItem").text(printObj.items.length);
+        $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
+        $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
+        $("#netTotal").text((+printObj.netTotal).toFixed(2));
+        $("#invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
+
+      });
+    </script>
   </body>
 </html>

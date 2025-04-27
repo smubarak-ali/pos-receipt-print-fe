@@ -26,7 +26,7 @@ export class ReceiptFormComponent implements OnInit {
   private readonly printService = inject(PrintServiceService);
 
   // readonly confirmModal = viewChild<SwalComponent>('confirmModal');
-  devagoRoute = AppRoutes.DEVAGO;
+  abdulHadiRoute = AppRoutes.ABDUL_HADI;
   pakMedicalRoute = AppRoutes.PAK_MEDICAL;
 
   form!: FormGroup;
@@ -155,35 +155,37 @@ export class ReceiptFormComponent implements OnInit {
 
     if (this.form.controls['printType']?.value === this.pakMedicalRoute) {
       window.open(`${environment.webUrl}/pak-medical.html`, "_blank");
+    } else if (this.form.controls['printType']?.value === this.abdulHadiRoute) {
+      this.printReceipt();
     }
     // await this.confirmModal()?.fire();
 
     // await this.router.navigate(["print"], { state: { type: this.form.controls['printType']?.value, printObject: this.printRequest() } });
   }
 
-  // printReceipt() {
-  //   this.printService.printDevagoReceipt(this.printRequest())
-  //     .pipe(take(1))
-  //     .subscribe({
-  //       next: () => {
-  //         this.form = this.fb.group({
-  //           date: new FormControl(new Date(), [Validators.required]),
-  //           printType: ['', [Validators.required]],
-  //           rows: this.fb.array([])
-  //         });
-  //         this.addRow();
-  //       },
-  //       error: (err) => {
-  //         console.error(err);
-  //       },
-  //       complete: () => {
-  //         this.total.set(0);
-  //         this.discount.set(0);
-  //         // this.confirmModal()?.close();
-  //         this.printRequest.set({} as PrintRequest);
-  //       }
-  //     });
-  // }
+  printReceipt() {
+    this.printService.printDevagoReceipt(this.printRequest())
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.form = this.fb.group({
+            date: new FormControl(new Date(), [Validators.required]),
+            printType: ['', [Validators.required]],
+            rows: this.fb.array([])
+          });
+          this.addRow();
+        },
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          this.total.set(0);
+          this.discount.set(0);
+          // this.confirmModal()?.close();
+          this.printRequest.set({} as PrintRequest);
+        }
+      });
+  }
 
   formatNumber(val: number) {
     return numbro(val).format({ mantissa: 2 });
