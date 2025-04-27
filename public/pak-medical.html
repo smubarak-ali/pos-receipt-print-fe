@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pak Medical Receipt</title>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        font-family: monospace;
+        background: #fff;
+        padding: 1px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 16pt;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .title {
+        font-size: 12pt;
+        font-weight: bold;
+        margin: 5px 0;
+        padding: 3px 0;
+        background-color: #000;
+        text-align: center;
+      }
+
+      .details,
+      .summary {
+        text-align: left;
+        font-size: 10pt;
+      }
+
+      .details td,
+      .summary td {
+        padding: 2px 0;
+      }
+
+      .items-table {
+        width: 100%;
+        font-size: 8.5pt;
+        border-collapse: collapse;
+        margin-top: 8px;
+      }
+
+      .items-table th,
+      .items-table td {
+        border-bottom: 1px solid #000;
+        padding: 4px 2px;
+        text-align: center;
+      }
+
+      .items-table th {
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .items-table td:last-child,
+      .items-table th:last-child {
+        text-align: right;
+      }
+
+      .total-line {
+        border-top: 1px solid #000;
+        margin-top: 8px;
+        padding-top: 8px;
+        font-weight: bold;
+      }
+
+      .amount-in-words {
+        margin-top: 8px;
+        font-size: 9pt;
+        font-style: italic;
+        text-align: left;
+      }
+
+      /* @media only screen and (max-width: 600px) {
+        .details table tbody tr td:first-child {
+            width: 50% !important;
+        }
+      } */
+
+    </style>
+    <script>
+      $(document).ready(function () {
+        const data = localStorage.getItem("pak_medical_print");
+        const discountStr = localStorage.getItem("discount");
+        if (data == null || discountStr == null) {
+          console.log(" no data found in local storage...");
+          alert("Please close this window and click on the print again!");
+          return;
+        }
+
+        let $table = $("#myTable");
+        const printObj = JSON.parse(data);
+        const discount = +discountStr;
+
+        for (const item of printObj.items) {
+          let row = "<tr>";
+          row += "<td>" + item.quantity + "</td>";
+          row += "<td>" + item.productName + "</td>";
+          row += "<td>" + item.price + "</td>";
+          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "</tr>";
+          $table.append(row);
+        }
+
+        let $invNo = $("#invNo");
+        $invNo.text(printObj.invoiceNumber);
+        $("#totalItem").text(printObj.items.length);
+        $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
+        $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
+        $("#netTotal").text((+printObj.netTotal).toFixed(2));
+        $("#invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
+
+      });
+    </script>
+  </head>
+  <body>
+    <div class="pak-medical">
+      <h2>PAK MEDICAL & GENERAL</h2>
+      <div style="color: #fff; text-decoration: underline;" class="title">Bill</div>
+
+      <div class="details">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 50%;"><strong>Customer Name:</strong></td>
+            <td>SYED YASIR</td>
+          </tr>
+          <tr>
+            <td style="width: 50%; font-size: 15pt;"><strong>Invoice No:</strong></td>
+            <td style="font-size: 15pt;" id="invNo"></td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><strong>Date/Time:</strong></td>
+            <td id="invDate">
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <table class="items-table" id="myTable">
+        <thead>
+          <tr>
+            <th style="width: 10%">Qty</th>
+            <th style="width: 50%">Item(s)</th>
+            <th style="width: 15%">Price</th>
+            <th style="width: 10%">Disc</th>
+            <th style="width: 15%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+
+      <div class="summary">
+        <table style="width: 100%;">
+          <tr>
+            <td><strong>Total Items:</strong></td>
+            <td id="totalItem"></td>
+          </tr>
+          <tr>
+            <td><strong>Total:</strong></td>
+            <td style="text-align: right;" id="totalAmount"></td>
+          </tr>
+          <tr>
+            <td><strong>Discount:</strong></td>
+            <td style="text-align: right;" id="totalDiscount"></td>
+          </tr>
+          <tr class="total-line">
+            <td><strong>Net Amount:</strong></td>
+            <td style="text-align: right;"><strong id="netTotal"></strong></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- <div class="amount-in-words">
+            One thousand Two Hundred Five Only
+        </div> -->
+    </div>
+  </body>
+</html>

@@ -6,6 +6,7 @@ export interface PrintRequest {
     posServiceFee: string;
     charge: string;
     netTotal: string;
+    invoiceNumber: number;
 }
 
 export interface PrintItems {

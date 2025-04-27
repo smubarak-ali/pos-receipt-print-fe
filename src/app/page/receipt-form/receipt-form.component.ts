@@ -8,10 +8,10 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
 import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
 import { Router } from '@angular/router';
 import { AppRoutes } from '../../utils/objects/route';
+import { getRandomNumber } from '../../utils/helper/number.helper';
 
 @Component({
   selector: 'app-receipt-form',
@@ -145,41 +145,52 @@ export class ReceiptFormComponent implements OnInit {
       posServiceFee: "0",
       charge: "0",
       netTotal: this.formatNumber(this.total() - this.discount()),
+      invoiceNumber: getRandomNumber(),
     };
 
     this.printRequest.set(printRequest);
 
+    localStorage.setItem("discount", `${environment.discount}`);
+    localStorage.setItem("pak_medical_print", JSON.stringify(printRequest));
+
+    if (this.form.controls['printType']?.value === this.pakMedicalRoute) {
+      window.open(`${environment.webUrl}/pak-medical.html`, "_blank");
+    }
     // await this.confirmModal()?.fire();
 
-    await this.router.navigate(["print"], { state: { type: this.form.controls['printType']?.value, printObject: this.printRequest() } });
+    // await this.router.navigate(["print"], { state: { type: this.form.controls['printType']?.value, printObject: this.printRequest() } });
   }
 
-  printReceipt() {
-    this.printService.printDevagoReceipt(this.printRequest())
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this.form = this.fb.group({
-            date: new FormControl(new Date(), [Validators.required]),
-            printType: ['', [Validators.required]],
-            rows: this.fb.array([])
-          });
-          this.addRow();
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          this.total.set(0);
-          this.discount.set(0);
-          // this.confirmModal()?.close();
-          this.printRequest.set({} as PrintRequest);
-        }
-      });
-  }
+  // printReceipt() {
+  //   this.printService.printDevagoReceipt(this.printRequest())
+  //     .pipe(take(1))
+  //     .subscribe({
+  //       next: () => {
+  //         this.form = this.fb.group({
+  //           date: new FormControl(new Date(), [Validators.required]),
+  //           printType: ['', [Validators.required]],
+  //           rows: this.fb.array([])
+  //         });
+  //         this.addRow();
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //       },
+  //       complete: () => {
+  //         this.total.set(0);
+  //         this.discount.set(0);
+  //         // this.confirmModal()?.close();
+  //         this.printRequest.set({} as PrintRequest);
+  //       }
+  //     });
+  // }
 
   formatNumber(val: number) {
     return numbro(val).format({ mantissa: 2 });
+  }
+
+  getDiscountedAmount(value: number) {
+    return value * environment.discount / 100;
   }
 
 }
