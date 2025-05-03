@@ -1,8 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
-import numbro from "numbro";
+import numbro from 'numbro';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { MedicineService } from '../../service/medicine.service';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
@@ -16,7 +22,7 @@ import { getRandomNumber } from '../../utils/helper/number.helper';
   selector: 'app-receipt-form',
   standalone: false,
   templateUrl: './receipt-form.component.html',
-  styleUrl: './receipt-form.component.scss'
+  styleUrl: './receipt-form.component.scss',
 })
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
@@ -36,11 +42,10 @@ export class ReceiptFormComponent implements OnInit {
     this.form = this.fb.group({
       date: new FormControl(new Date(), [Validators.required]),
       printType: ['', [Validators.required]],
-      rows: this.fb.array([])
+      rows: this.fb.array([]),
     });
 
     this.addRow();
-    
   }
 
   ngOnInit() {
@@ -62,43 +67,37 @@ export class ReceiptFormComponent implements OnInit {
       price: ['0', [Validators.required, greaterThan(0)]],
       gstRate: ['0'],
       gst: ['0'],
-      total: ['0', [Validators.required, greaterThan(0)]]
+      total: ['0', [Validators.required, greaterThan(0)]],
     });
     this.rows.push(row);
 
-    row.get('medicine')?.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(val => {
+    row
+      .get('medicine')
+      ?.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((val) => {
         if (val) {
-          const selectedMedicine = this.medicines().find(x => x.name === val);
+          const selectedMedicine = this.medicines().find((x) => x.name === val);
           if (selectedMedicine) {
             row.get('price')?.setValue(`${selectedMedicine.price}`);
           }
         }
       });
 
-    row.get('price')?.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(value => {
-        const quantity = row.get('quantity')?.value
+    row
+      .get('price')
+      ?.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const quantity = row.get('quantity')?.value;
         if (!!quantity && !!value) {
           row.get('total')?.setValue(`${(+value * +quantity).toFixed(2)}`);
         }
       });
 
-    row.get('quantity')?.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(value => {
-        const price = row.get('price')?.value
+    row
+      .get('quantity')
+      ?.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const price = row.get('price')?.value;
         if (!!price && !!value) {
           row.get('total')?.setValue(`${(+value * +price).toFixed(2)}`);
         }
@@ -132,7 +131,7 @@ export class ReceiptFormComponent implements OnInit {
       printItems.push(printItem);
     });
 
-    const totalDiscount = total * environment.discount / 100;
+    const totalDiscount = (total * environment.discount) / 100;
     this.total.set(total);
     this.discount.set(totalDiscount);
 
@@ -141,33 +140,37 @@ export class ReceiptFormComponent implements OnInit {
       items: printItems,
       totalAmount: this.formatNumber(this.total()),
       totalDiscount: this.formatNumber(this.discount()),
-      posServiceFee: "0",
-      charge: "0",
+      posServiceFee: '0',
+      charge: '0',
       netTotal: this.formatNumber(this.total() - this.discount()),
       invoiceNumber: getRandomNumber(),
     };
 
     this.printRequest.set(printRequest);
 
-    localStorage.setItem("discount", `${environment.discount}`);
-    localStorage.setItem("pak_medical_print", JSON.stringify(printRequest));
+    localStorage.setItem('discount', `${environment.discount}`);
 
     if (this.form.controls['printType']?.value === this.pakMedicalPrintType) {
-      window.open(`${environment.webUrl}/pak-medical.html`, "_blank");
-    } else if (this.form.controls['printType']?.value === this.abdulHadiPrintType) {
+      localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
+      window.open(`${environment.webUrl}/pak-medical.html`, '_blank');
+    } 
+    else if (
+      this.form.controls['printType']?.value === this.abdulHadiPrintType
+    ) {
       this.printReceipt();
     }
   }
 
   printReceipt() {
-    this.printService.printDevagoReceipt(this.printRequest())
+    this.printService
+      .printDevagoReceipt(this.printRequest())
       .pipe(take(1))
       .subscribe({
         next: () => {
           this.form = this.fb.group({
             date: new FormControl(new Date(), [Validators.required]),
             printType: ['', [Validators.required]],
-            rows: this.fb.array([])
+            rows: this.fb.array([]),
           });
           this.addRow();
         },
@@ -179,7 +182,7 @@ export class ReceiptFormComponent implements OnInit {
           this.discount.set(0);
           // this.confirmModal()?.close();
           this.printRequest.set({} as PrintRequest);
-        }
+        },
       });
   }
 
@@ -188,8 +191,6 @@ export class ReceiptFormComponent implements OnInit {
   }
 
   getDiscountedAmount(value: number) {
-    return value * environment.discount / 100;
+    return (value * environment.discount) / 100;
   }
-
 }
-

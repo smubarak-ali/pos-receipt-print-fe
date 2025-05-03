@@ -15,7 +15,7 @@ interface State {
 export class MedicineService {
 
   private readonly state = signalState<State>({
-    medicines: [],
+    medicines: []
   });
   private readonly BASE_URL = environment.baseUrl;
   private readonly http = inject(HttpClient);

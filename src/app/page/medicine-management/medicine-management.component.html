@@ -29,7 +29,7 @@
                         col-md-3
                         col-lg-3">
                 <div class="box">
-                    <button class="outline" type="submit">Add</button>
+                    <button class="outline" type="submit">Add / Edit</button>
                 </div>
             </div>
         </div>
@@ -37,8 +37,10 @@
 </div>
 
 <div class="table">
-    <input type="text" name="search"  />
-    
+    <form [formGroup]="searchForm">
+        <input type="text" name="search" placeholder="Search medicine..." formControlName="searchQuery" />
+    </form>
+
     <table>
         <thead>
             <tr>
@@ -48,7 +50,7 @@
             </tr>
         </thead>
         <tbody>
-            @for (medicine of medicines(); track medicine.id;) {
+            @for (medicine of filteredList() || medicines(); track medicine.id;) {
             <tr scope="row">
                 <td>
                     <label>{{ medicine.name }}</label>
