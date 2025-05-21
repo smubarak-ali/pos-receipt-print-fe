@@ -10,12 +10,11 @@ interface State {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MedicineService {
-
   private readonly state = signalState<State>({
-    medicines: []
+    medicines: [],
   });
   private readonly BASE_URL = environment.baseUrl;
   private readonly http = inject(HttpClient);
@@ -24,23 +23,29 @@ export class MedicineService {
     return this.state.medicines;
   }
 
-  loadMedicines() {
-    this.http.get<Medicine[]>(`${this.BASE_URL}/v1/medicine`)
-      .pipe(take(1))
-      .subscribe(medicines => {
-        patchState(this.state, (prev) => ({
-          ...prev,
-          medicines: medicines,
-        }));
-      });
+  async loadMedicines() {
+    // this.http.get<Medicine[]>(`${this.BASE_URL}/v1/medicine`)
+    //   .pipe(take(1))
+    //   .subscribe(medicines => {
+    // patchState(this.state, (prev) => ({
+    //   ...prev,
+    //   medicines: medicines,
+    // }));
+    //   });
+    const list = await window.api.getAll();
+    patchState(this.state, (prev) => ({
+      ...prev,
+      medicines: list,
+    }));
   }
 
-  addMedicine(medicine: Medicine) {
-    return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
+  async addMedicine(medicine: Medicine) {
+    // return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
+    return await window.api.save(medicine);
   }
 
-  deleteMedicine(id: number) {
-    return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
+  async deleteMedicine(id: number) {
+    // return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
+    return await window.api.delete(id);
   }
-
 }

@@ -48,8 +48,8 @@ export class ReceiptFormComponent implements OnInit {
     this.addRow();
   }
 
-  ngOnInit() {
-    this.medicineService.loadMedicines();
+  async ngOnInit() {
+    await this.medicineService.loadMedicines();
   }
 
   get medicines() {
@@ -159,6 +159,7 @@ export class ReceiptFormComponent implements OnInit {
     ) {
       this.printReceipt();
     }
+
   }
 
   printReceipt() {
