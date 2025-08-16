@@ -24,28 +24,22 @@ export class MedicineService {
   }
 
   async loadMedicines() {
-    // this.http.get<Medicine[]>(`${this.BASE_URL}/v1/medicine`)
-    //   .pipe(take(1))
-    //   .subscribe(medicines => {
-    // patchState(this.state, (prev) => ({
-    //   ...prev,
-    //   medicines: medicines,
-    // }));
-    //   });
-    const list = await window.api.getAll();
-    patchState(this.state, (prev) => ({
-      ...prev,
-      medicines: list,
-    }));
+    this.http
+      .get<Medicine[]>(`${this.BASE_URL}/v1/medicine`)
+      .pipe(take(1))
+      .subscribe((medicines) => {
+        patchState(this.state, (prev) => ({
+          ...prev,
+          medicines: medicines,
+        }));
+      });
   }
 
   async addMedicine(medicine: Medicine) {
-    // return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
-    return await window.api.save(medicine);
+    return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
   }
 
   async deleteMedicine(id: number) {
-    // return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
-    return await window.api.delete(id);
+    return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
   }
 }

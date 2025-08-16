@@ -12,7 +12,6 @@ import {
 
 import { MedicineService } from '../../service/medicine.service';
 import { PrintItems, PrintRequest } from '../../utils/model/print';
-import { PrintServiceService } from '../../service/print-service.service';
 import { environment } from '../../../environments/environment';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
 import { PrintType } from '../../utils/objects/constants';
@@ -27,7 +26,6 @@ import { getRandomNumber } from '../../utils/helper/number.helper';
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
   private readonly medicineService = inject(MedicineService);
-  private readonly printService = inject(PrintServiceService);
 
   abdulHadiPrintType = PrintType.ABDUL_HADI;
   pakMedicalPrintType = PrintType.PAK_MEDICAL;
@@ -150,41 +148,22 @@ export class ReceiptFormComponent implements OnInit {
 
     localStorage.setItem('discount', `${environment.discount}`);
 
-    if (this.form.controls['printType']?.value === this.pakMedicalPrintType) {
-      localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
-      window.open(`${environment.webUrl}/pak-medical.html`, '_blank');
-    } 
-    else if (
-      this.form.controls['printType']?.value === this.abdulHadiPrintType
-    ) {
-      this.printReceipt();
+    switch (this.form.controls['printType'].value) {
+      case this.pakMedicalPrintType:
+        localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
+        window.open(`${environment.webUrl}/pak-medical.html`, '_blank');
+        return;
+
+      case this.mdmPrintType:
+        localStorage.setItem('mdm_print', JSON.stringify(printRequest));
+        window.open(`${environment.webUrl}/mdm.html`, '_blank');
+        return;
+
+      case this.abdulHadiPrintType:
+        localStorage.setItem('hadi_print', JSON.stringify(printRequest));
+        window.open(`${environment.webUrl}/hadi.html`, '_blank');
+        return;
     }
-
-  }
-
-  printReceipt() {
-    this.printService
-      .printDevagoReceipt(this.printRequest())
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this.form = this.fb.group({
-            date: new FormControl(new Date(), [Validators.required]),
-            printType: ['', [Validators.required]],
-            rows: this.fb.array([]),
-          });
-          this.addRow();
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          this.total.set(0);
-          this.discount.set(0);
-          // this.confirmModal()?.close();
-          this.printRequest.set({} as PrintRequest);
-        },
-      });
   }
 
   formatNumber(val: number) {

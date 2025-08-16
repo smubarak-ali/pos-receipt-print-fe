@@ -10,6 +10,8 @@ declare global {
       delete: (id: number) => Promise<void>;
 
       save: (medicine: Medicine) => Promise<Medicine>;
+
+      openPrintModal: (name: string) => Promise<void>;
     };
   }
 }

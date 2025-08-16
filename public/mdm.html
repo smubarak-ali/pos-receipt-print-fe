@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Receipt</title>
+    <title>MDM Receipt</title>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <style>
       body {
         font-family: "Courier New", Courier, monospace;
@@ -114,5 +119,41 @@
         <p>Powered by: Anas Software House (Shumail # 0324-2010921)</p>
       </div>
     </div>
+
+    <script>
+      $(document).ready(function () {
+        const data = localStorage.getItem("mdm_print");
+        const discountStr = localStorage.getItem("discount");
+        if (data == null || discountStr == null) {
+          console.log(" no data found in local storage...");
+          alert("Please close this window and click on the print again!");
+          return;
+        }
+
+        let $table = $("#myTable");
+        const printObj = JSON.parse(data);
+        const discount = +discountStr;
+
+        for (const item of printObj.items) {
+          let row = "<tr>";
+          row += "<td>" + item.quantity + "</td>";
+          row += "<td>" + item.productName + "</td>";
+          row += "<td>" + item.price + "</td>";
+          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "</tr>";
+          $table.append(row);
+        }
+
+        let $invNo = $("#invNo");
+        $invNo.text(printObj.invoiceNumber);
+        $("#totalItem").text(printObj.items.length);
+        $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
+        $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
+        $("#netTotal").text((+printObj.netTotal).toFixed(2));
+        $("#invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
+
+      });
+    </script>
   </body>
 </html>
