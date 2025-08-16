@@ -159,10 +159,10 @@ export class ReceiptFormComponent implements OnInit {
         window.open(`${environment.webUrl}/mdm.html`, '_blank');
         return;
 
-      case this.abdulHadiPrintType:
-        localStorage.setItem('hadi_print', JSON.stringify(printRequest));
-        window.open(`${environment.webUrl}/hadi.html`, '_blank');
-        return;
+      // case this.abdulHadiPrintType:
+      //   localStorage.setItem('hadi_print', JSON.stringify(printRequest));
+      //   window.open(`${environment.webUrl}/hadi.html`, '_blank');
+      //   return;
     }
   }
 

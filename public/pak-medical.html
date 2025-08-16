@@ -36,8 +36,8 @@
         margin: 5px 0;
         padding: 3px 0;
         text-align: center;
-        color: #000; 
-        text-decoration: underline; 
+        color: #000;
+        text-decoration: underline;
         font-weight: bolder;
       }
 
@@ -135,7 +135,7 @@
           </tr>
         </thead>
         <tbody>
-          
+
         </tbody>
       </table>
 
@@ -184,7 +184,7 @@
           row += "<td>" + item.quantity + "</td>";
           row += "<td>" + item.productName + "</td>";
           row += "<td>" + item.price + "</td>";
-          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+          row += "<td>" + (item.price * (discount / 100))?.toFixed(2) + "</td>";
           row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
           row += "</tr>";
           $table.append(row);

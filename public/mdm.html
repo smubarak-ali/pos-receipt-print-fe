@@ -1,159 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MDM Receipt</title>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"
-    ></script>
-    <style>
-      body {
-        font-family: "Courier New", Courier, monospace;
-        background-color: #fafafa;
-        /* margin: 20px; */
-        color: #333;
-      }
-      .receipt {
-        background: #fff;
-        /* border: 1px solid #000; */
-        /* padding: 20px;
-        width: 320px;
-        margin: 0 auto; */
-      }
-      .header,
-      .footer {
-        text-align: center;
-      }
-      .header h2 {
-        margin-bottom: 5px;
-      }
-      .header p {
-        margin: 2px 0;
-        font-size: 0.9em;
-      }
-      .details p,
-      .total p {
-        margin: 3px 0;
-        font-size: 0.9em;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 10px 0;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid #000;
-      }
-      th,
-      td {
-        padding: 4px;
-        text-align: center;
-        font-size: 0.85em;
-      }
-      .total {
-        border-top: 1px dashed #000;
-        padding-top: 8px;
-      }
-      .total p strong {
-        font-size: 1em;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="receipt">
-      <div class="header">
-        <h2>M.D.M</h2>
-        <p>
-          Shop # M-3, Al-Azam Square, F.B. Area, Block-1,<br />Sharifabad,
-          Karachi
-        </p>
-        <p>Contact No.: 0213-6334494 &amp; 0333-2468902</p>
-        <p><strong>CASH MEMO</strong></p>
-      </div>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MDM Receipt</title>
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+  <style>
+    body {
+      font-family: "Courier New", Courier, monospace;
+      background-color: #fafafa;
+      /* margin: 20px; */
+      color: #333;
+    }
 
-      <div class="details">
-        <p><strong>Number:</strong> 123337</p>
-        <p><strong>Date:</strong> 26/03/2025</p>
-        <p><strong>Time:</strong> 10:13 P.M</p>
-        <p><strong>Customer Name:</strong> PURCHASER</p>
-        <p><strong>User ID:</strong> PURCHASER</p>
-      </div>
+    .receipt {
+      background: #fff;
+      /* border: 1px solid #000; */
+      /* padding: 20px;
+      width: 320px;
+      margin: 0 auto; */
+    }
 
-      <div class="items">
-        <table>
-          <tr>
-            <th>Item Name</th>
-            <th>Rate</th>
-            <th>Discount %</th>
-            <th>Amount</th>
-          </tr>
-          <tr>
-            <td>Novorapid Pen</td>
-            <td>1761.42</td>
-            <td>9.70</td>
-            <td>1590.56</td>
-          </tr>
-        </table>
-      </div>
+    .header {
+      padding-bottom: 10px;
+    }
 
-      <div class="total">
-        <p><strong># of Items:</strong> 1</p>
-        <p><strong>Gross Total:</strong> 1762.00</p>
-        <p><strong>You Saved:</strong> 170.85</p>
-        <p><strong>Net Total:</strong> 1591.00</p>
-        <p><strong>NET AMOUNT: 1591</strong></p>
-      </div>
+    .header,
+    .footer {
+      text-align: center;
+    }
 
-      <div class="footer">
-        <p>
-          Loose tablet, sugar strip, surgical, fridge item are non-refundable
-          non-exchangeable
-        </p>
-        <p>No return &amp; no exchange without bill after 3 days. Thank you</p>
-        <p>THANKS.</p>
-        <p>Powered by: Anas Software House (Shumail # 0324-2010921)</p>
-      </div>
-    </div>
+    .header h2 {
+      margin-bottom: 5px;
+    }
 
-    <script>
-      $(document).ready(function () {
-        const data = localStorage.getItem("mdm_print");
-        const discountStr = localStorage.getItem("discount");
-        if (data == null || discountStr == null) {
-          console.log(" no data found in local storage...");
-          alert("Please close this window and click on the print again!");
-          return;
-        }
+    .header p {
+      margin: 2px 0;
+      font-size: 0.9em;
+    }
 
-        let $table = $("#myTable");
-        const printObj = JSON.parse(data);
-        const discount = +discountStr;
+    .details p,
+    .total p {
+      margin: 3px 0;
+      font-size: 0.9em;
+    }
 
-        for (const item of printObj.items) {
-          let row = "<tr>";
-          row += "<td>" + item.quantity + "</td>";
-          row += "<td>" + item.productName + "</td>";
-          row += "<td>" + item.price + "</td>";
-          row += "<td>" + (item.quantity * (discount / 100))?.toFixed(2) + "</td>";
-          row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
-          row += "</tr>";
-          $table.append(row);
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0;
+    }
 
-        let $invNo = $("#invNo");
-        $invNo.text(printObj.invoiceNumber);
-        $("#totalItem").text(printObj.items.length);
-        $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
-        $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
-        $("#netTotal").text((+printObj.netTotal).toFixed(2));
-        $("#invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
+    table thead {
+      border-top: 1px dashed #000;
+      border-bottom: 1px dashed #000;
+    }
 
-      });
-    </script>
-  </body>
+    th,
+    td {
+      padding: 4px;
+      text-align: center;
+      font-size: 0.85em;
+    }
+
+    table tbody > tr > td:first-child {
+      text-align: right;
+    }
+
+    .total {
+      border-top: 1px dashed #a2a2a2;
+      padding-top: 6px;
+    }
+
+    .total > tbody > tr > td {
+      text-align: right;
+    }
+
+    .total p strong {
+      font-size: 1em;
+    }
+
+    #conditions_1 {
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+<div class="receipt">
+  <div class="header">
+    <h2>M.D.M</h2>
+    <p>
+      Shop # M-3, Al-Azam Square, F.B. Area, Block-1,<br/>Sharifabad,
+      Karachi
+    </p>
+    <p>Contact No.: 0213-6334494 &amp; 0333-2468902</p>
+    <p><strong>CASH MEMO</strong></p>
+  </div>
+
+  <div class="details">
+    <p><strong>Number:</strong><strong id="invNo"></strong></p>
+    <p><strong>Date:</strong><strong id="invDate"></strong></p>
+    <p><strong>Customer Name: Yasir</strong></p>
+    <p><strong>User I.D.:</strong> PURCHASER</p>
+  </div>
+
+  <div class="items">
+    <table id="myTable">
+      <thead>
+      <tr>
+        <th style="width: 7%;">Box/Pcs</th>
+        <th style="width: 33%;">Item Name</th>
+        <th style="width: 20%;">Rate</th>
+        <th style="width: 20%;">Dis. %</th>
+        <th style="width: 20%;">Amount</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+  <table class="total">
+    <tr>
+      <td><strong># of Items:</strong></td>
+      <td id="totalItems"></td>
+    </tr>
+    <tr>
+      <td><strong>Gross Total:</strong></td>
+      <td id="totalAmount"></td>
+    </tr>
+    <tr>
+      <td><strong>You Saved:</strong></td>
+      <td id="totalDiscount"></td>
+    </tr>
+    <tr>
+      <td><strong>Net Total:</strong></td>
+      <td id="netTotal"></td>
+    </tr>
+    <tr>
+      <td><strong>NET AMOUNT:</strong></td>
+      <td><strong id="netTotal_final"></strong></td>
+    </tr>
+  </table>
+
+  <hr style="border-style: dashed; margin-bottom: 2px; border-color: #a2a2a2; " />
+  <hr style="border-style: dashed; margin-top: 2px; border-color: #a2a2a2;" />
+
+  <div class="footer">
+    <p id="conditions_1">
+      Loose tablet, sugar strip, surgical, fridge item are non-refundable
+      non-exchangeable
+    </p>
+    <p>No return &amp; no exchange without bill after 3 days. Thank you</p>
+    <p style="text-align: right;">THANKS.</p>
+    <hr style="border-style: dashed; border-color: #a2a2a2;" />
+    <p> POWERED BY:<br> Anas Software House (Shumail # 0324-2010921)</p>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const data = localStorage.getItem("mdm_print");
+    const discountStr = localStorage.getItem("discount");
+    if (data == null || discountStr == null) {
+      console.log(" no data found in local storage...");
+      alert("Please close this window and click on the print again!");
+      return;
+    }
+
+    let $table = $("#myTable");
+    const printObj = JSON.parse(data);
+    const discount = +discountStr;
+
+    $table.append("<tbody></tbody>");
+    for (const item of printObj.items) {
+      let row = "<tr>";
+      row += "<td>" + item.quantity + "</td>";
+      row += "<td>" + item.productName + "</td>";
+      row += "<td>" + item.price.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
+      row += "<td>" + (item.price * (discount / 100))?.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
+      row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
+      row += "</tr>";
+      $table.append(row);
+    }
+
+    let $invNo = $("#invNo");
+    $invNo.append(" " + printObj.invoiceNumber);
+    $("#totalItems").append(" " + printObj.items.length);
+    $("#totalAmount").append(" " + (+printObj.totalAmount).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    $("#totalDiscount").append(" " + (+printObj.totalDiscount).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    $("#netTotal").append(" " + (+printObj.netTotal).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    $("#netTotal_final").append(" " + (+printObj.netTotal).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    $("#invDate").append(" " + new Date(printObj.date).toLocaleDateString("en-PK") + "    "+ new Date(printObj.date).toLocaleTimeString("en-PK"));
+
+  });
+</script>
+</body>
 </html>
