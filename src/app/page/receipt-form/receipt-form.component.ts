@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
 import { PrintType } from '../../utils/objects/constants';
 import { getRandomNumber } from '../../utils/helper/number.helper';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-receipt-form',
@@ -26,6 +27,7 @@ import { getRandomNumber } from '../../utils/helper/number.helper';
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
   private readonly medicineService = inject(MedicineService);
+  private readonly route = inject(Router);
 
   abdulHadiPrintType = PrintType.ABDUL_HADI;
   pakMedicalPrintType = PrintType.PAK_MEDICAL;
@@ -151,17 +153,17 @@ export class ReceiptFormComponent implements OnInit {
     switch (this.form.controls['printType'].value) {
       case this.pakMedicalPrintType:
         localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
-        window.open(`${environment.webUrl}/pak-medical.html`, '_blank');
+        window.open(`${this.route.url}/pak-medical.html`, '_blank');
         return;
 
       case this.mdmPrintType:
         localStorage.setItem('mdm_print', JSON.stringify(printRequest));
-        window.open(`${environment.webUrl}/mdm.html`, '_blank');
+        window.open(`${this.route.url}/mdm.html`, '_blank');
         return;
 
       // case this.abdulHadiPrintType:
       //   localStorage.setItem('hadi_print', JSON.stringify(printRequest));
-      //   window.open(`${environment.webUrl}/hadi.html`, '_blank');
+      //   window.open(`${this.route.url}/hadi.html`, '_blank');
       //   return;
     }
   }

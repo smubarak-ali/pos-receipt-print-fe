@@ -10,5 +10,5 @@ RUN yarn build
 FROM nginx:alpine
 COPY --from=build /app/dist/printer-web/browser /usr/share/nginx/html
 COPY --from=build /app/nginx-custom.conf /etc/nginx/conf.d/default.conf
-EXPOSE 8083
+EXPOSE 8085
 CMD ["nginx", "-g", "daemon off;"]
