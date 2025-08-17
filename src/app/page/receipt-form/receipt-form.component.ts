@@ -153,17 +153,17 @@ export class ReceiptFormComponent implements OnInit {
     switch (this.form.controls['printType'].value) {
       case this.pakMedicalPrintType:
         localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
-        window.open(`${this.route.url}/pak-medical.html`, '_blank');
+        window.open(`${window.location.href}/pak-medical.html`, '_blank');
         return;
 
       case this.mdmPrintType:
         localStorage.setItem('mdm_print', JSON.stringify(printRequest));
-        window.open(`${this.route.url}/mdm.html`, '_blank');
+        window.open(`${window.location.href}/mdm.html`, '_blank');
         return;
 
       // case this.abdulHadiPrintType:
       //   localStorage.setItem('hadi_print', JSON.stringify(printRequest));
-      //   window.open(`${this.route.url}/hadi.html`, '_blank');
+      //   window.open(`${window.location.href}/hadi.html`, '_blank');
       //   return;
     }
   }
