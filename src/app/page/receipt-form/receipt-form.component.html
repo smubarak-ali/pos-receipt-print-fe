@@ -4,7 +4,7 @@
   <a routerLink="/medicine">View medicine</a>
 </div>
 
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
   <div style="padding-top: 3px; padding-bottom: 5px; width: 50%;">
     <input type="datetime-local" name="datetime-local" aria-label="Datetime local" formControlName="date" />
   </div>
@@ -71,9 +71,12 @@
   <div class="pb-3">
     <input type="radio" name="printType" formControlName="printType" [value]="mdmPrintType" /> MDM
   </div>
+  <div class="pb-3">
+    <input type="radio" name="printType" formControlName="printType" [value]="ziaMedicalPrintType" /> Ziauddin
+  </div>
 
   <div class="form-footer">
-    <button type="button" style="width: 170px;" [disabled]="form.invalid" (click)="onSubmit()">Print</button>
+    <button type="submit" style="width: 170px;" [disabled]="form.invalid">Print</button>
   </div>
 
 </form>

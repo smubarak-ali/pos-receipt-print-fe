@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
 import numbro from 'numbro';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs';
 import {
   FormArray,
   FormBuilder,
@@ -16,7 +16,6 @@ import { environment } from '../../../environments/environment';
 import { greaterThan } from '../../utils/custom-validator/greaterThan';
 import { PrintType } from '../../utils/objects/constants';
 import { getRandomNumber } from '../../utils/helper/number.helper';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-receipt-form',
@@ -27,10 +26,10 @@ import {Router} from '@angular/router';
 export class ReceiptFormComponent implements OnInit {
   private destroy$ = injectDestroy();
   private readonly medicineService = inject(MedicineService);
-  private readonly route = inject(Router);
 
   abdulHadiPrintType = PrintType.ABDUL_HADI;
   pakMedicalPrintType = PrintType.PAK_MEDICAL;
+  ziaMedicalPrintType = PrintType.ZIAUDDIN;
   mdmPrintType = PrintType.MDM;
 
   form!: FormGroup;
@@ -115,7 +114,8 @@ export class ReceiptFormComponent implements OnInit {
     this.addRow();
   }
 
-  async onSubmit() {
+  async onSubmit(event: Event) {
+    event.preventDefault();
     const printItems = new Array<PrintItems>();
     let total = 0;
     this.form.value.rows.forEach((row: any) => {
@@ -150,21 +150,27 @@ export class ReceiptFormComponent implements OnInit {
 
     localStorage.setItem('discount', `${environment.discount}`);
 
+    let url = window.location.href;
     switch (this.form.controls['printType'].value) {
       case this.pakMedicalPrintType:
         localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
-        window.open(`${window.location.href}/pak-medical.html`, '_blank');
+        window.open(`${url}pak-medical.html`, '_blank');
         return;
 
       case this.mdmPrintType:
         localStorage.setItem('mdm_print', JSON.stringify(printRequest));
-        window.open(`${window.location.href}/mdm.html`, '_blank');
+        window.open(`${url}mdm.html`);
         return;
 
-      // case this.abdulHadiPrintType:
-      //   localStorage.setItem('hadi_print', JSON.stringify(printRequest));
-      //   window.open(`${window.location.href}/hadi.html`, '_blank');
-      //   return;
+      case this.abdulHadiPrintType:
+        localStorage.setItem('hadi_print', JSON.stringify(printRequest));
+        window.open(`${url}hadi.html`);
+        return;
+
+      case this.ziaMedicalPrintType:
+        localStorage.setItem('zia_print', JSON.stringify(printRequest));
+        window.open(`${url}zia.html`);
+        return;
     }
   }
 

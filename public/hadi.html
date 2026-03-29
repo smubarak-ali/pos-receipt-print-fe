@@ -1,10 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Abdul Hadi Medical Store</title>
+  <title>POS Receipt</title>
+  <style>
+    body {
+      font-family: monospace;
+      width: 300px;
+      margin: 0 auto;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .divider {
+      border-top: 1px dashed #000;
+      margin: 8px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 2px 0;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
 
+  <div class="center">
+    <div class="bold">ABDUL HADI MEDICAL & GENERAL STORE</div>
+    <div>Shop No. 2, Azizabad</div>
+    <div>Contact: 0306-3738034</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div>Invoice #: 927579</div>
+    <div>Date: 02/09/2026 21:40</div>
+    <div>Cashier: 700013</div>
+    <div>Customer: SYED YASIR</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="right">Qty</th>
+        <th class="right">Price</th>
+        <th class="right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Qusel 100mg</td>
+        <td class="right">20</td>
+        <td class="right">45.9</td>
+        <td class="right">917.4</td>
+      </tr>
+      <tr>
+        <td>Scitrum</td>
+        <td class="right">30</td>
+        <td class="right">30.0</td>
+        <td class="right">900.0</td>
+      </tr>
+      <tr>
+        <td>Panadol 500mg</td>
+        <td class="right">20</td>
+        <td class="right">3.0</td>
+        <td class="right">60.0</td>
+      </tr>
+      <tr>
+        <td>Oridone 2mg</td>
+        <td class="right">28</td>
+        <td class="right">28.0</td>
+        <td class="right">784.0</td>
+      </tr>
+      <tr>
+        <td>Dulcet 37.5/325mg</td>
+        <td class="right">20</td>
+        <td class="right">13.3</td>
+        <td class="right">266.0</td>
+      </tr>
+      <tr>
+        <td>Lexotanil 3mg</td>
+        <td class="right">10</td>
+        <td class="right">9.4</td>
+        <td class="right">93.6</td>
+      </tr>
+      <tr>
+        <td>Sacvin 50</td>
+        <td class="right">20</td>
+        <td class="right">51.8</td>
+        <td class="right">1036.2</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <div>
+    <div>Items Sold: 148</div>
+    <div>No. of Items: 7</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <table>
+    <tr>
+      <td>Total Amount:</td>
+      <td class="right">4037.20</td>
+    </tr>
+    <tr>
+      <td>Discount:</td>
+      <td class="right">405.72</td>
+    </tr>
+    <tr class="bold">
+      <td>Net Total:</td>
+      <td class="right">3651.48</td>
+    </tr>
+  </table>
+
+  <div class="divider"></div>
+
+  <div>
+    <div>Payment Method: CASH</div>
+    <div class="bold right">Rs. 3651.48</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="center">
+    ** Thanks for Shopping **
+  </div>
+
 </body>
+
 </html>
