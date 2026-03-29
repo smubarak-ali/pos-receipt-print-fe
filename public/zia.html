@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital Receipt</title>
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+  <style>
+    body {
+      font-family: monospace;
+      /*width: 300px;*/
+      margin: auto;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .divider {
+      border-top: 1px dashed #000;
+      margin: 8px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 2px 0;
+      vertical-align: top;
+    }
+
+    .small {
+      font-size: 11px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="center bold">
+  DR. ZIAUDDIN HOSPITAL
+</div>
+
+<div class="divider"></div>
+
+<!-- Patient Info -->
+<table>
+  <tr>
+    <td>Rx #:</td>
+    <td class="right">596946</td>
+  </tr>
+  <tr>
+    <td>M.R #:</td>
+    <td class="right">869</td>
+  </tr>
+  <tr>
+    <td>Name:</td>
+    <td class="right">RASHDA PERVAIZ</td>
+  </tr>
+  <tr>
+    <td>Date:</td>
+    <td class="right invDate"></td>
+  </tr>
+</table>
+
+<div class="divider"></div>
+
+<!-- Items -->
+<table id="myTable">
+  <thead>
+  <tr>
+    <th>Item</th>
+    <th class="right">Qty</th>
+    <th class="right">Rate</th>
+    <th class="right">Amt</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
+
+<div class="divider"></div>
+
+<!-- Totals -->
+<table>
+  <tr>
+    <td>Gross Amount:</td>
+    <td class="right" id="totalAmount"></td>
+  </tr>
+  <tr>
+    <td>Discount:</td>
+    <td class="right" id="totalDiscount"></td>
+  </tr>
+  <tr>
+    <td>Paid Amount:</td>
+    <td class="right netTotal"></td>
+  </tr>
+  <tr>
+    <td>Refund:</td>
+    <td class="right">0.00</td>
+  </tr>
+  <tr class="bold">
+    <td>Net Amount:</td>
+    <td class="right netTotal"></td>
+  </tr>
+</table>
+
+<div class="divider"></div>
+
+<!-- Payment -->
+<div>
+  Payment Type: <span class="bold">CASH</span>
+</div>
+
+<div class="divider"></div>
+
+<!-- Footer -->
+<div class="small">
+  Printing Time: <span class="invDate"></span><br>
+  User: PHR-MARYAM SOHAIL
+</div>
+
+<div class="divider"></div>
+
+<div class="center small">
+  Medical/Surgical items once sold will not be taken back<br>
+  Keep this receipt for record<br>
+  Karachi, Pakistan
+</div>
+
+<script>
+  $(document).ready(function () {
+    const data = localStorage.getItem("zia_print");
+    const discountStr = localStorage.getItem("discount");
+    if (data == null || discountStr == null) {
+      console.log(" no data found in local storage...");
+      alert("Please close this window and click on the print again!");
+      return;
+    }
+
+    let $table = $("#myTable");
+    const printObj = JSON.parse(data);
+    const discount = +discountStr;
+
+    for (const item of printObj.items) {
+      let row = "<tr>";
+      row += "<td>" + item.productName + "</td>";
+      row += "<td class='right'>" + item.quantity + "</td>";
+      row += "<td class='right'>" + item.price + "</td>";
+      // row += "<td class='right'>" + (item.price * (discount / 100))?.toFixed(2) + "</td>";
+      row += "<td class='right'>" + (item.totalAmount - item.quantity * (discount / 100))?.toFixed(2) + "</td>";
+      row += "</tr>";
+      $table.append(row);
+    }
+
+    let $invNo = $("#invNo");
+    $invNo.text(printObj.invoiceNumber);
+    $("#totalItem").text(printObj.items.length);
+    $("#totalAmount").text((+printObj.totalAmount).toFixed(2));
+    $("#totalDiscount").text((+printObj.totalDiscount).toFixed(2));
+    $(".netTotal").text((+printObj.netTotal).toFixed(2));
+    $(".invDate").text(new Date(printObj.date).toLocaleString(undefined, { hour12: true, dateStyle: "full", timeStyle: "medium" }));
+
+  });
+</script>
+</body>
+
+</html>
