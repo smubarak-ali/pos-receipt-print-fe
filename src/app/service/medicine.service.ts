@@ -23,7 +23,7 @@ export class MedicineService {
     return this.state.medicines;
   }
 
-  async loadMedicines() {
+  loadMedicines() {
     this.http
       .get<Medicine[]>(`${this.BASE_URL}/v1/medicine`)
       .pipe(take(1))
@@ -35,11 +35,11 @@ export class MedicineService {
       });
   }
 
-  async addMedicine(medicine: Medicine) {
+  addMedicine(medicine: Medicine) {
     return this.http.post<Medicine>(`${this.BASE_URL}/v1/medicine`, medicine);
   }
 
-  async deleteMedicine(id: number) {
+  deleteMedicine(id: number) {
     return this.http.delete(`${this.BASE_URL}/v1/medicine/${id}`);
   }
 }

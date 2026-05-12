@@ -81,35 +81,28 @@ export class MedicineManagementComponent implements OnDestroy {
   }
 
   async addMedicine(medicine: Medicine) {
-    try {
-      await this.medicineService.addMedicine(medicine);
-      await this.medicineService.loadMedicines();
-    } finally {
-      this.searchQuery.setValue(null);
-      this.initForm();
-    }
-    // this.medicineService
-    //   .addMedicine(medicine)
-    //   .pipe(take(1))
-    //   .subscribe({
-    //     next: async () => {
-    //       await this.medicineService.loadMedicines();
-    //     },
-    //     complete: () => {
-    //           this.searchQuery.setValue(null);
-    // this.initForm();
-    //     },
-    //   });
+    this.medicineService
+      .addMedicine(medicine)
+      .pipe(take(1))
+      .subscribe({
+        next: async () => {
+          await this.medicineService.loadMedicines();
+        },
+        complete: () => {
+              this.searchQuery.setValue(null);
+              this.initForm();
+        },
+      });
   }
 
   async deleteMedicine(id: number) {
-    await this.medicineService.deleteMedicine(id);
-    // this.medicineService
-    //   .deleteMedicine(id)
-    //   .pipe(take(1))
-    //   .subscribe(() => {
-    //     this.medicineService.loadMedicines();
-    //   });
+    // await this.medicineService.deleteMedicine(id);
+    this.medicineService
+      .deleteMedicine(id)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.medicineService.loadMedicines();
+      });
   }
 
   formatNumber(val: number) {
