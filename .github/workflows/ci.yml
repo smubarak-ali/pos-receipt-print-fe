@@ -1,4 +1,4 @@
-name: Build and Push Angular Docker Image
+name: Build and Push Print App Image
 
 on:
   push:
