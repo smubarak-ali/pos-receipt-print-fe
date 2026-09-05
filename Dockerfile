@@ -1,8 +1,9 @@
 # Stage 1: Build the Angular application
-FROM node:25-alpine AS build
+FROM node:26-alpine AS build
+RUN apk add --no-cache yarn
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn
+RUN yarn install
 COPY . .
 RUN yarn build
 
