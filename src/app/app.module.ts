@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,7 +21,7 @@ import { ReceiptFormComponent } from './page/receipt-form/receipt-form.component
     ReactiveFormsModule
   ],
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
   ],
   bootstrap: [AppComponent]
 })

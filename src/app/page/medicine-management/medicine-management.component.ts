@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormBuilder,
@@ -31,6 +32,7 @@ import { greaterThan } from '../../utils/custom-validator/greaterThan';
   selector: 'app-medicine-management',
   standalone: false,
   templateUrl: './medicine-management.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './medicine-management.component.scss',
 })
 export class MedicineManagementComponent implements OnDestroy {

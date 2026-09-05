@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { injectDestroy } from 'ngxtension/inject-destroy';
 import numbro from 'numbro';
 import { distinctUntilChanged, takeUntil } from 'rxjs';
@@ -21,6 +21,7 @@ import { getRandomNumber } from '../../utils/helper/number.helper';
   selector: 'app-receipt-form',
   standalone: false,
   templateUrl: './receipt-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './receipt-form.component.scss',
 })
 export class ReceiptFormComponent implements OnInit {
