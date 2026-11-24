@@ -111,15 +111,10 @@
     ** Thanks for Shopping **
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const data = localStorage.getItem("hadi_print");
-      if (data === null) {
-        alert("Please close this window and click on the print again!");
-        return;
-      }
+  <script type="module">
+    import { receiveReceipt } from "./receipt-preview.js";
 
-      const receipt = JSON.parse(data);
+    receiveReceipt(receipt => {
       const receiptItems = document.getElementById("receiptItems");
       let itemsSold = 0;
 

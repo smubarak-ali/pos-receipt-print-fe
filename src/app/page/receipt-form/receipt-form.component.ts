@@ -17,6 +17,13 @@ import { greaterThan } from '../../utils/custom-validator/greaterThan';
 import { PrintType } from '../../utils/objects/constants';
 import { getRandomNumber } from '../../utils/helper/number.helper';
 
+const printTemplates = new Map([
+  [PrintType.ABDUL_HADI, 'hadi.html'],
+  [PrintType.PAK_MEDICAL, 'pak-medical.html'],
+  [PrintType.MDM, 'mdm.html'],
+  [PrintType.ZIAUDDIN, 'zia.html'],
+]);
+
 @Component({
   selector: 'app-receipt-form',
   standalone: false,
@@ -36,7 +43,7 @@ export class ReceiptFormComponent implements OnInit {
   form!: FormGroup;
   total = signal(0);
   discount = signal(0);
-  printRequest = signal<PrintRequest>({} as PrintRequest);
+  printError = signal('');
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -115,8 +122,9 @@ export class ReceiptFormComponent implements OnInit {
     this.addRow();
   }
 
-  async onSubmit(event: Event) {
+  onSubmit(event: Event) {
     event.preventDefault();
+    this.printError.set('');
     const printItems = new Array<PrintItems>();
     let total = 0;
     this.form.value.rows.forEach((row: any) => {
@@ -147,32 +155,37 @@ export class ReceiptFormComponent implements OnInit {
       invoiceNumber: getRandomNumber(),
     };
 
-    this.printRequest.set(printRequest);
-
-    localStorage.setItem('discount', `${environment.discount}`);
-
-    let url = window.location.href;
-    switch (this.form.controls['printType'].value) {
-      case this.pakMedicalPrintType:
-        localStorage.setItem('pak_medical_print', JSON.stringify(printRequest));
-        window.open(`${url}pak-medical.html`, '_blank');
-        return;
-
-      case this.mdmPrintType:
-        localStorage.setItem('mdm_print', JSON.stringify(printRequest));
-        window.open(`${url}mdm.html`);
-        return;
-
-      case this.abdulHadiPrintType:
-        localStorage.setItem('hadi_print', JSON.stringify(printRequest));
-        window.open(`${url}hadi.html`);
-        return;
-
-      case this.ziaMedicalPrintType:
-        localStorage.setItem('zia_print', JSON.stringify(printRequest));
-        window.open(`${url}zia.html`);
-        return;
+    const template = printTemplates.get(this.form.controls['printType'].value);
+    if (template) {
+      this.openPrintPreview(template, printRequest);
     }
+  }
+
+  private openPrintPreview(template: string, receipt: PrintRequest) {
+    const url = new URL(template, document.baseURI);
+    const preview = window.open(url.href, '_blank');
+    if (!preview) {
+      this.printError.set('Allow pop-ups for this site and click Print again.');
+      return;
+    }
+
+    const listener = new AbortController();
+    const timeout = window.setTimeout(() => {
+      listener.abort();
+      if (!preview.closed) {
+        this.printError.set('The receipt preview did not load. Click Print to try again.');
+      }
+    }, 10_000);
+
+    window.addEventListener('message', (event: MessageEvent) => {
+      if (event.origin !== url.origin || event.source !== preview || event.data !== 'receipt-ready') {
+        return;
+      }
+
+      window.clearTimeout(timeout);
+      listener.abort();
+      preview.postMessage({ type: 'receipt-data', receipt, discountRate: environment.discount }, url.origin);
+    }, { signal: listener.signal });
   }
 
   formatNumber(val: number) {

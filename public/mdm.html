@@ -4,11 +4,6 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MDM Receipt</title>
-  <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"
-  ></script>
   <style>
     body {
       font-family: "Courier New", Courier, monospace;
@@ -163,41 +158,30 @@
   </div>
 </div>
 
-<script>
-  $(document).ready(function () {
-    const data = localStorage.getItem("mdm_print");
-    const discountStr = localStorage.getItem("discount");
-    if (data == null || discountStr == null) {
-      console.log(" no data found in local storage...");
-      alert("Please close this window and click on the print again!");
-      return;
+<script type="module">
+  import { receiveReceipt } from "./receipt-preview.js";
+
+  receiveReceipt((receipt, discountRate) => {
+    const items = document.querySelector("#myTable tbody");
+    const formatAmount = value => value.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const discount = discountRate / 100;
+    for (const item of receipt.items) {
+      const row = items.insertRow();
+      row.insertCell().textContent = item.quantity;
+      row.insertCell().textContent = item.productName;
+      row.insertCell().textContent = formatAmount(item.price);
+      row.insertCell().textContent = formatAmount(item.price * discount);
+      row.insertCell().textContent = formatAmount(item.totalAmount - item.quantity * discount);
     }
 
-    let $table = $("#myTable");
-    const printObj = JSON.parse(data);
-    const discount = +discountStr;
-
-    $table.append("<tbody></tbody>");
-    for (const item of printObj.items) {
-      let row = "<tr>";
-      row += "<td>" + item.quantity + "</td>";
-      row += "<td>" + item.productName + "</td>";
-      row += "<td>" + item.price.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
-      row += "<td>" + (item.price * (discount / 100))?.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
-      row += "<td>" + (item.totalAmount - item.quantity * (discount / 100))?.toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</td>";
-      row += "</tr>";
-      $table.append(row);
-    }
-
-    let $invNo = $("#invNo");
-    $invNo.append(" " + printObj.invoiceNumber);
-    $("#totalItems").append(" " + printObj.items.length);
-    $("#totalAmount").append(" " + (+printObj.totalAmount).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    $("#totalDiscount").append(" " + (+printObj.totalDiscount).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    $("#netTotal").append(" " + (+printObj.netTotal).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    $("#netTotal_final").append(" " + (+printObj.netTotal).toLocaleString("en-PK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    $("#invDate").append(" " + new Date(printObj.date).toLocaleDateString("en-PK") + "    "+ new Date(printObj.date).toLocaleTimeString("en-PK"));
-
+    const date = new Date(receipt.date);
+    document.getElementById("invNo").textContent = " " + receipt.invoiceNumber;
+    document.getElementById("totalItems").textContent = " " + receipt.items.length;
+    document.getElementById("totalAmount").textContent = " " + formatAmount(Number(receipt.totalAmount));
+    document.getElementById("totalDiscount").textContent = " " + formatAmount(Number(receipt.totalDiscount));
+    document.getElementById("netTotal").textContent = " " + formatAmount(Number(receipt.netTotal));
+    document.getElementById("netTotal_final").textContent = " " + formatAmount(Number(receipt.netTotal));
+    document.getElementById("invDate").textContent = " " + date.toLocaleDateString("en-PK") + "    " + date.toLocaleTimeString("en-PK");
   });
 </script>
 </body>

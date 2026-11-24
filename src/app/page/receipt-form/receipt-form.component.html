@@ -78,5 +78,8 @@
   <div class="form-footer">
     <button type="submit" style="width: 170px;" [disabled]="form.invalid">Print</button>
   </div>
+  @if (printError()) {
+  <p role="alert">{{ printError() }}</p>
+  }
 
 </form>
